@@ -1,0 +1,854 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     PROFESSIONAL SOLUTION MANUAL TEMPLATE                   %
+%                            Enhanced Professional Version                     %
+%                                                                              %
+% USAGE INSTRUCTIONS:                                                          %
+% 1. Replace "Your Name" with your actual name                                %
+% 2. Replace "Course Title or Subject" with your course/subject               %
+% 3. Replace "your.email@example.com" with your email                         %
+% 4. Modify chapter and section titles as needed                              %
+% 5. Replace placeholder problems and solutions with actual content           %
+% 6. Customize colors in the color definitions section if desired             %
+%                                                                              %
+% FEATURES:                                                                    %
+% - Professional styling with tcolorbox environments                          %
+% - Problem/Solution environments with automatic numbering                    %
+% - Key Insight and Key Observation environments                              %
+% - Standard theorem environments (Definition, Lemma, Theorem, etc.)         %
+% - Cross-referencing with cleveref                                          %
+% - Hyperlinked table of contents and references                             %
+% - Professional color scheme                                                 %
+% - Index and bibliography support                                           %
+%                                                                              %
+% COMPILE INSTRUCTIONS:                                                        %
+% Run: pdflatex -> pdflatex -> makeindex -> pdflatex                         %
+% (Multiple runs needed for cross-references and index)                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt, oneside, openany]{book}
+
+%------------------------------------------------------------------------------
+% 1. ENCODING, LANGUAGE, GEOMETRY
+%------------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\geometry{
+    a4paper, 
+    margin=1.1in, 
+    headheight=15pt,
+    footskip=30pt,
+    marginparwidth=2cm
+}
+
+%------------------------------------------------------------------------------
+% 2. MATH PACKAGES
+%------------------------------------------------------------------------------
+\usepackage{amsthm, amssymb, mathtools}
+
+%------------------------------------------------------------------------------
+% 3. FONTS & TYPOGRAPHY
+%------------------------------------------------------------------------------
+\usepackage{lmodern} % Latin Modern fonts - widely available
+\usepackage{microtype} % Improved typography
+\usepackage{setspace} % Line spacing control
+\setstretch{1.1} % Slightly increased line spacing for readability
+
+% Better section formatting
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{NavyBlue}}
+  {\chaptertitlename\ \thechapter}{20pt}{\Huge\color{black}}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{NavyBlue}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{DarkSlateGray}}
+  {\thesubsection}{1em}{}
+
+%------------------------------------------------------------------------------
+% 4. COLOR, BOXES, ENUMERATION
+%------------------------------------------------------------------------------
+\usepackage[dvipsnames, svgnames, table]{xcolor}
+\usepackage{enumitem}
+\usepackage[many]{tcolorbox}
+\tcbuselibrary{theorems, breakable, skins}
+
+% Enhanced color palette
+\definecolor{primaryblue}{RGB}{41, 98, 255}
+\definecolor{secondaryblue}{RGB}{66, 133, 244}
+\definecolor{lightblue}{RGB}{232, 240, 254}
+\definecolor{darkgray}{RGB}{55, 71, 79}
+\definecolor{lightgray}{RGB}{245, 246, 247}
+\definecolor{accentgreen}{RGB}{52, 168, 83}
+\definecolor{warningorange}{RGB}{255, 171, 0}
+
+% Problem and solution colors
+\definecolor{problemback}{RGB}{232, 240, 254}
+\definecolor{problembar}{RGB}{41, 98, 255}
+\definecolor{solutionback}{RGB}{249, 250, 251}
+
+% Definition and theorem colors
+\definecolor{definitionback}{RGB}{240, 253, 244}
+\definecolor{definitionbar}{RGB}{52, 168, 83}
+\definecolor{lemmaback}{RGB}{255, 248, 225}
+\definecolor{lemmabar}{RGB}{255, 171, 0}
+\definecolor{insightback}{RGB}{255, 245, 238}
+\definecolor{insightbar}{RGB}{255, 87, 34}
+
+%------------------------------------------------------------------------------
+% 5. TOC & INDEXING
+%------------------------------------------------------------------------------
+\usepackage{tocloft}
+\cftsetindents{section}{0em}{2.5em}
+\cftsetindents{subsection}{2.5em}{3em}
+\setlength{\cftbeforechapskip}{1em}
+\setlength{\cftbeforesecskip}{0.5em}
+\usepackage{makeidx}
+\makeindex
+
+%------------------------------------------------------------------------------
+% 6. HYPERLINKING & REFERENCING
+%------------------------------------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={Solution Manual},
+    pdfauthor={Your Name},
+    colorlinks=true,
+    linkcolor=NavyBlue,
+    citecolor=ForestGreen,
+    urlcolor=DarkOrchid,
+    bookmarksopen=true,
+    bookmarksnumbered=true,
+    pdfdisplaydoctitle=true
+}
+% cleveref should be loaded after hyperref
+\usepackage[capitalize, nameinlink]{cleveref}
+
+%------------------------------------------------------------------------------
+% 7. THEOREM STYLES & CUSTOM ENVIRONMENTS
+%------------------------------------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
+
+%%% ENHANCED PROBLEM ENVIRONMENT
+\newtcbtheorem[auto counter, number within=section,
+    crefname={Problem}{Problems},
+    ]%
+    {problem}{Problem}%
+    {
+        enhanced,
+        breakable,
+        colback=problemback,
+        colframe=primaryblue,
+        boxrule=1pt,
+        arc=3pt,
+        borderline west={3pt}{0pt}{primaryblue},
+        fonttitle=\bfseries\color{primaryblue},
+        title={Problem \thetcbcounter: #1},
+        attach boxed title to top left={yshift=-2mm, xshift=8mm},
+        boxed title style={
+            boxrule=1pt,
+            colback=white,
+            colframe=primaryblue,
+            arc=2pt
+        },
+        top=8mm,
+        left=4mm,
+        right=4mm,
+        bottom=4mm,
+        drop fuzzy shadow={opacity=0.1}
+    }{prob}
+
+%%% ENHANCED SOLUTION ENVIRONMENT
+\newtcolorbox{solution}{
+    enhanced,
+    breakable,
+    colback=solutionback,
+    colframe=darkgray!30,
+    boxrule=0.5pt,
+    arc=2pt,
+    fonttitle=\bfseries\color{darkgray},
+    title=Solution,
+    attach boxed title to top left={yshift=-2mm, xshift=8mm},
+    boxed title style={
+        boxrule=0.5pt,
+        colback=white,
+        colframe=darkgray!30,
+        arc=1pt
+    },
+    top=8mm,
+    left=4mm,
+    right=4mm,
+    bottom=4mm,
+    before skip=10pt,
+    after skip=10pt
+}
+
+% Note: Simple theorem environments (definition, lemma, etc.) are defined above
+% using \newtheorem. For enhanced visual styles, you can replace them with 
+% tcolorbox versions if needed.
+
+%%% KEY INSIGHT ENVIRONMENT
+\newtcolorbox{keyinsight}{
+    enhanced,
+    breakable,
+    colback=insightback,
+    colframe=insightbar,
+    boxrule=1pt,
+    arc=2pt,
+    fonttitle=\bfseries\color{insightbar!80!black},
+    title={$\star$ Key Insight},
+    attach boxed title to top left={yshift=-2mm, xshift=8mm},
+    boxed title style={
+        boxrule=1pt,
+        colback=white,
+        colframe=insightbar,
+        arc=1pt
+    },
+    top=8mm,
+    left=4mm,
+    right=4mm,
+    bottom=4mm,
+    before skip=8pt,
+    after skip=8pt
+}
+
+%%% KEY OBSERVATION ENVIRONMENT  
+\newtcolorbox{keyobservation}{
+    enhanced,
+    breakable,
+    colback=lightblue!50,
+    colframe=primaryblue,
+    boxrule=1pt,
+    arc=2pt,
+    fonttitle=\bfseries\color{primaryblue},
+    title={$\bullet$ Key Observation},
+    attach boxed title to top left={yshift=-2mm, xshift=8mm},
+    boxed title style={
+        boxrule=1pt,
+        colback=white,
+        colframe=primaryblue,
+        arc=1pt
+    },
+    top=8mm,
+    left=4mm,
+    right=4mm,
+    bottom=4mm,
+    before skip=8pt,
+    after skip=8pt
+}
+
+
+%------------------------------------------------------------------------------
+% 8. CUSTOM MACROS & COMMANDS
+%------------------------------------------------------------------------------
+
+% Common mathematical sets
+\newcommand{\R}{\mathbb{R}}          % Real numbers
+\newcommand{\N}{\mathbb{N}}          % Natural numbers
+\newcommand{\Z}{\mathbb{Z}}          % Integers
+\newcommand{\Q}{\mathbb{Q}}          % Rational numbers
+\newcommand{\C}{\mathbb{C}}          % Complex numbers
+
+% Additional mathematical sets (uncomment as needed)
+% \newcommand{\F}{\mathbb{F}}        % Field
+% \newcommand{\H}{\mathbb{H}}        % Quaternions
+% \newcommand{\P}{\mathbb{P}}        % Projective space
+
+% Delimiters and operators
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}    % Inner product
+\DeclarePairedDelimiter{\bracket}{[}{]}               % Brackets
+\DeclarePairedDelimiter{\paren}{(}{)}                 % Parentheses
+
+% Common functions and operators
+\newcommand{\indicator}[1]{\mathbf{1}_{#1}}          % Indicator function
+\newcommand{\closure}[1]{\overline{#1}}              % Closure
+\newcommand{\interior}[1]{\overset{\circ}{#1}}       % Interior
+\newcommand{\boundary}[1]{\partial #1}               % Boundary
+\newcommand{\powerset}[1]{\mathcal{P}(#1)}          % Power set
+\newcommand{\complem}[1]{#1^c}                      % Complement (renamed to avoid conflict)
+
+% Calculus and analysis
+\newcommand{\dd}{\mathrm{d}}                          % Differential d
+\newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}          % Derivative
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}} % Partial derivative
+% Note: \lim, \limsup, \liminf already defined by LaTeX
+
+% Linear algebra
+\newcommand{\rank}{\text{rank}}                      % Rank
+\newcommand{\trace}{\text{tr}}                       % Trace
+% Note: \det already defined by LaTeX
+\newcommand{\spn}{\text{span}}                       % Span (renamed to avoid conflict)
+\newcommand{\kernel}{\text{ker}}                     % Kernel
+\newcommand{\image}{\text{im}}                       % Image
+
+% Probability and statistics (uncomment as needed)
+% \newcommand{\Prob}{\mathbb{P}}                     % Probability
+% \newcommand{\Expect}{\mathbb{E}}                   % Expectation
+% \newcommand{\Var}{\text{Var}}                      % Variance
+% \newcommand{\Cov}{\text{Cov}}                      % Covariance
+
+% Formatting helpers
+\newcommand{\important}[1]{\textbf{\color{primaryblue}#1}}
+\newcommand{\highlight}[1]{\colorbox{lightblue!50}{#1}}
+\newcommand{\marginnote}[1]{\marginpar{\footnotesize\color{darkgray}#1}}
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{TODO: #1}}}
+\renewcommand{\qed}{\hfill\ensuremath{\blacksquare}}
+
+% Convenient shortcuts for common phrases
+\newcommand{\wolog}{\emph{without loss of generality}}  % Renamed to avoid conflict
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\cf}{\emph{cf.}}
+\newcommand{\etc}{\emph{etc.}}
+
+% Reference shortcuts (use with cleveref)
+% Note: \eqref already defined by LaTeX/amsmath
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+
+
+%------------------------------------------------------------------------------
+% 9. TITLE METADATA & HEADER/FOOTER
+%------------------------------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textsl{\leftmark}}
+\fancyhead[R]{\textsl{Solution Manual}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Title page configuration
+\title{
+    \vspace{-2cm}
+    {\Huge\bfseries\color{primaryblue} Solution Manual} \\[0.5cm]
+    {\Large\color{darkgray} Course Title or Subject} \\[0.3cm]
+    {\large\color{darkgray} Selected Problems and Solutions}
+}
+\author{
+    {\large\bfseries Your Name} \\[0.2cm]
+    {\normalsize\color{darkgray} \texttt{your.email@example.com}} \\[0.1cm]
+    {\small\color{darkgray} Institution or Affiliation (Optional)}
+}
+\date{
+    {\normalsize\color{darkgray} \today} \\[0.2cm]
+    {\small\color{darkgray} Version 1.0}
+}
+
+%------------------------------------------------------------------------------
+% 10. ADDITIONAL USEFUL ENVIRONMENTS
+%------------------------------------------------------------------------------
+
+%%% EXAMPLE ENVIRONMENT
+\newtcolorbox{example}{
+    enhanced,
+    breakable,
+    colback=accentgreen!10,
+    colframe=accentgreen,
+    boxrule=0.5pt,
+    arc=2pt,
+    fonttitle=\bfseries\color{accentgreen!80!black},
+    title=Example,
+    attach boxed title to top left={yshift=-2mm, xshift=8mm},
+    boxed title style={
+        boxrule=0.5pt,
+        colback=white,
+        colframe=accentgreen,
+        arc=1pt
+    },
+    top=8mm,
+    left=4mm,
+    right=4mm,
+    bottom=4mm,
+    before skip=8pt,
+    after skip=8pt
+}
+
+%%% NOTE/REMARK ENVIRONMENT
+\newtcolorbox{note}{
+    enhanced,
+    breakable,
+    colback=warningorange!10,
+    colframe=warningorange,
+    boxrule=0.5pt,
+    arc=2pt,
+    fonttitle=\bfseries\color{warningorange!80!black},
+    title=Note,
+    attach boxed title to top left={yshift=-2mm, xshift=8mm},
+    boxed title style={
+        boxrule=0.5pt,
+        colback=white,
+        colframe=warningorange,
+        arc=1pt
+    },
+    top=8mm,
+    left=4mm,
+    right=4mm,
+    bottom=4mm,
+    before skip=8pt,
+    after skip=8pt
+}
+
+%==============================================================================
+%                               BEGIN DOCUMENT
+%==============================================================================
+\begin{document}
+
+% Enhanced Title page
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    % Title
+    {\Huge\bfseries\color{primaryblue} Solution Manual\par}
+    \vspace{0.5cm}
+    {\Large\color{darkgray} Course Title or Subject\par}
+    \vspace{2cm}
+    
+    % Author info
+    \begin{tcolorbox}[
+        enhanced,
+        colback=white,
+        colframe=primaryblue,
+        boxrule=1.5pt,
+        arc=5pt,
+        width=0.7\textwidth,
+        center title,
+        fonttitle=\large\bfseries,
+        title=Author Information
+    ]
+    \centering
+    {\large Your Name}\\[0.3cm]
+    {\normalsize your.email@example.com}\\[0.2cm]
+    {\small Institution or Affiliation}
+    \end{tcolorbox}
+    
+    \vfill
+    
+    % Professional description
+    \begin{tcolorbox}[
+        enhanced,
+        colback=lightblue,
+        colframe=primaryblue,
+        boxrule=1pt,
+        arc=3pt,
+        width=0.85\textwidth,
+        center title,
+        fonttitle=\bfseries\color{primaryblue},
+        title=About This Solution Manual
+    ]
+    This manual provides comprehensive solutions to selected problems, featuring:
+    \begin{itemize}
+        \item Detailed step-by-step solutions
+        \item Key insights and observations
+        \item Rigorous mathematical proofs
+        \item Cross-referenced definitions and theorems
+        \item Professional formatting for easy reading
+    \end{itemize}
+    \end{tcolorbox}
+    
+    \vfill
+    
+    % Date and version
+    \begin{center}
+        {\color{darkgray}\today}\\[0.2cm]
+        {\small\color{darkgray}Version 1.0}
+    \end{center}
+\end{titlepage}
+
+% Professional Preface
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+\markboth{Preface}{Preface}
+
+\begin{tcolorbox}[
+    enhanced,
+    colback=lightgray,
+    colframe=darkgray,
+    boxrule=0.5pt,
+    arc=2pt,
+    left=4mm,
+    right=4mm,
+    top=3mm,
+    bottom=3mm
+]
+\textit{Welcome to this comprehensive solution manual. This document is designed 
+to provide clear, detailed solutions that enhance understanding of the subject matter.}
+\end{tcolorbox}
+
+This solution manual has been carefully prepared to assist students and instructors 
+in understanding complex problem-solving techniques. Each solution is presented with:
+
+\begin{itemize}[leftmargin=1.5cm, itemsep=0.3cm]
+    \item \textbf{Clear explanations}: Every step is explained in detail
+    \item \textbf{Key insights}: Important observations are highlighted
+    \item \textbf{Alternative approaches}: Multiple solution methods when applicable
+    \item \textbf{Cross-references}: Connections to relevant definitions and theorems
+    \item \textbf{Verification}: Solutions include checks where appropriate
+\end{itemize}
+
+\section*{How to Use This Manual}
+
+\begin{description}[leftmargin=2cm, itemsep=0.5cm]
+    \item[\textbf{Problems}] are presented in blue boxes with clear statements
+    \item[\textbf{Solutions}] follow immediately with detailed explanations
+    \item[\textbf{Key Insights}] appear in orange boxes highlighting crucial understanding
+    \item[\textbf{Key Observations}] are shown in green boxes for important notes
+    \item[\textbf{Cross-references}] use the format \texttt{\\cref\{label\}} for easy navigation
+\end{description}
+
+\begin{note}
+This manual is a living document. If you find errors or have suggestions for 
+improvements, please contact the author at the email address provided on the title page.
+\end{note}
+
+\section*{Acknowledgments}
+
+Thanks to the mathematical community for providing the foundation upon which these 
+solutions are built, and to all students and colleagues who provided feedback during 
+the preparation of this manual.
+
+\vfill
+\begin{center}
+\textit{``Mathematics is not about numbers, equations, computations, or algorithms:}\\
+\textit{it is about understanding.''}\\
+--- William Paul Thurston
+\end{center}
+
+\newpage
+\tableofcontents
+\newpage
+
+%==============================================================================
+%                          TEMPLATE USAGE GUIDE
+%==============================================================================
+\chapter*{How to Use This Template}
+\addcontentsline{toc}{chapter}{How to Use This Template}
+\markboth{How to Use This Template}{How to Use This Template}
+
+\begin{note}
+This chapter explains how to use the template effectively. You can delete this chapter when creating your actual solution manual.
+\end{note}
+
+\section*{Available Environments}
+
+\subsection*{Problem and Solution Environments}
+
+The template provides enhanced environments for problems and solutions:
+
+\textbf{Basic Usage:}
+\begin{verbatim}
+\begin{problem}{Problem Title}{label:unique-identifier}
+    State your problem here.
+\end{problem}
+
+\begin{solution}
+    Provide your solution here.
+\end{solution}
+\end{verbatim}
+
+\subsection*{Enhanced Solution Features}
+
+\textbf{Key Insight Environment:}
+\begin{verbatim}
+\begin{keyinsight}
+    The crucial insight is that...
+\end{keyinsight}
+\end{verbatim}
+
+\begin{keyinsight}
+    Example: This insight box helps highlight the most important ideas in your solution.
+\end{keyinsight}
+
+\textbf{Key Observation Environment:}
+\begin{verbatim}
+\begin{keyobservation}
+    Notice that this approach works because...
+\end{keyobservation}
+\end{verbatim}
+
+\begin{keyobservation}
+    Example: Use observations to point out important details that students might miss.
+\end{keyobservation}
+
+\subsection*{Mathematical Environments}
+
+\textbf{Definitions:}
+\begin{verbatim}
+\begin{definition}[Optional Name]
+    A formal definition goes here.
+\end{definition}
+\end{verbatim}
+
+\begin{definition}[Limit]
+    We say that $\lim_{x \to a} f(x) = L$ if for every $\varepsilon > 0$, there exists $\delta > 0$ such that whenever $0 < |x - a| < \delta$, we have $|f(x) - L| < \varepsilon$.
+\end{definition}
+
+\textbf{Lemmas and Theorems:}
+\begin{verbatim}
+\begin{lemma}[Optional Name]
+    Statement of the lemma.
+\end{lemma}
+
+\begin{theorem}[Optional Name]
+    Statement of the theorem.
+\end{theorem}
+\end{verbatim}
+
+\section*{Mathematical Typesetting Tips}
+
+\subsection*{Built-in Mathematical Shortcuts}
+
+The template includes many useful shortcuts:
+
+\begin{itemize}
+    \item \texttt{\\dd} for differential d: $\int f(x) \dd x$
+    \item \texttt{\\dv\{f\}\{x\}} for derivatives: $\dv{f}{x}$
+    \item \texttt{\\pdv\{f\}\{x\}} for partial derivatives: $\pdv{f}{x}$
+    \item \texttt{\\complem\{A\}} for complement: $\complem{A}$ (renamed to avoid conflicts)
+    \item \texttt{\\closure\{A\}} for closure: $\closure{A}$
+    \item \texttt{\\interior\{A\}} for interior: $\interior{A}$
+    \item \texttt{\\boundary\{A\}} for boundary: $\boundary{A}$
+\end{itemize}
+
+\subsection*{Formatting Helpers}
+
+\begin{itemize}
+    \item \texttt{\\important\{text\}} for \important{important text}
+    \item \texttt{\\highlight\{text\}} for \highlight{highlighted text}
+    \item \texttt{\\wolog} for \wolog
+    \item \texttt{\\ie} for \ie, \texttt{\\eg} for \eg
+\end{itemize}
+
+\section*{Cross-Referencing}
+
+Use meaningful labels and the \texttt{cleveref} package for smart references:
+
+\begin{verbatim}
+\begin{problem}{Sample Problem}{prob:sample}
+    This is a sample problem.
+\end{problem}
+
+Later, reference it with: \cref{prob:sample}
+\end{verbatim}
+
+The template supports:
+\begin{itemize}
+    \item \texttt{\\cref\{label\}} for smart references
+    \item \texttt{\\figref\{label\}} for figures
+    \item \texttt{\\tabref\{label\}} for tables
+    \item Standard \texttt{\\eqref\{label\}} for equations
+\end{itemize}
+
+\section*{Example and Note Environments}
+
+\textbf{Examples:}
+\begin{verbatim}
+\begin{example}
+    Show that the function f(x) = x² is continuous.
+\end{example}
+\end{verbatim}
+
+\begin{example}
+    To show continuity of $f(x) = x^2$ at $x = a$, we compute:
+    $$\lim_{x \to a} f(x) = \lim_{x \to a} x^2 = a^2 = f(a)$$
+\end{example}
+
+\textbf{Notes:}
+\begin{verbatim}
+\begin{note}
+    Additional information or remarks.
+\end{note}
+\end{verbatim}
+
+\section*{Color Customization}
+
+To customize colors, modify these definitions in the preamble:
+
+\begin{verbatim}
+\definecolor{primaryblue}{RGB}{41, 98, 255}      % Main accent
+\definecolor{problemback}{RGB}{232, 240, 254}    % Problem background
+\definecolor{solutionback}{RGB}{249, 250, 251}   % Solution background
+\end{verbatim}
+
+\section*{Compilation Instructions}
+
+\begin{note}
+For best results, compile the document as follows:
+
+\begin{enumerate}
+    \item \texttt{pdflatex filename.tex} (first pass)
+    \item \texttt{pdflatex filename.tex} (second pass for cross-references)
+    \item \texttt{makeindex filename.idx} (if using index)
+    \item \texttt{pdflatex filename.tex} (final pass)
+\end{enumerate}
+
+Most modern LaTeX editors handle this automatically.
+\end{note}
+
+\section*{Getting Started}
+
+\begin{enumerate}
+    \item \textbf{Customize the title page}: Update the author name, course title, email, and institution in the preamble.
+    \item \textbf{Modify chapters and sections}: Replace the placeholder chapter and section titles with your content.
+    \item \textbf{Add your content}: Replace the example problems and solutions with your actual material.
+    \item \textbf{Compile the document}: Run \texttt{pdflatex} multiple times to ensure proper cross-references.
+\end{enumerate}
+
+\section*{Available Environments}
+
+This template provides several custom environments:
+
+\begin{description}
+    \item[\texttt{problem}] For stating problems with automatic numbering
+    \item[\texttt{solution}] For providing detailed solutions
+    \item[\texttt{keyinsight}] For highlighting crucial insights within solutions
+    \item[\texttt{keyobservation}] For noting important observations
+    \item[\texttt{example}] For providing illustrative examples
+    \item[\texttt{note}] For important remarks or warnings
+\end{description}
+
+\section*{Mathematical Commands}
+
+The template includes many predefined mathematical commands. See the preamble for a complete list, including:
+
+\begin{itemize}
+    \item Common sets: \verb|\R|, \verb|\N|, \verb|\Z|, \verb|\Q|, \verb|\C|
+    \item Delimiters: \verb|\abs{x}|, \verb|\norm{x}|, \verb|\inner{x,y}|
+    \item Functions: \verb|\indicator{A}|, \verb|\closure{A}|, \verb|\interior{A}|
+    \item Calculus: \verb|\dv{f}{x}|, \verb|\pdv{f}{x}|
+\end{itemize}
+
+\begin{example}
+Here's how to use some mathematical commands:
+\begin{align}
+    f: \R \to \R, \quad f(x) = \abs{x}^2 \\
+    \norm{x + y} \leq \norm{x} + \norm{y} \quad \text{(Triangle inequality)}
+\end{align}
+\end{example}
+
+\newpage
+
+%==============================================================================
+%                             ACTUAL CONTENT
+%==============================================================================
+
+\chapter{Chapter Title 1}
+\thispagestyle{fancy}
+
+% Chapter introduction
+\begin{tcolorbox}[
+    enhanced,
+    colback=lightgray,
+    colframe=darkgray,
+    boxrule=0.5pt,
+    arc=2pt,
+    left=4mm,
+    right=4mm,
+    top=3mm,
+    bottom=3mm
+]
+\textit{This chapter covers fundamental concepts in your subject area. 
+Add a brief description of the topics covered in this chapter.}
+\end{tcolorbox}
+
+\section{Section Title 1}
+
+\begin{definition}
+A \textbf{special property} is a mathematical concept that satisfies the following conditions:
+\begin{enumerate}
+    \item It preserves the fundamental structure of the object.
+    \item It is invariant under transformations.
+    \item It can be characterized in multiple equivalent ways.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}
+Every object with the special property has a unique canonical representation.
+\end{lemma}
+\begin{proof}
+The proof follows from the definition and basic properties of the underlying structure. We proceed by construction...
+\end{proof}
+
+\begin{problem}{This is Problem 1}{problem1}
+    This is problem 1. Write your problem statement here.
+\end{problem}
+\begin{solution}
+    Solution to problem 1 goes here.
+\end{solution}
+
+\begin{problem}{This is Problem 2}{problem2}
+    This is problem 2. Write your problem statement here.
+\end{problem}
+\begin{solution}
+    Solution to problem 2 goes here.
+\end{solution}
+
+\begin{problem}{This is Problem 3}{problem3}
+    This is problem 3. Write your problem statement here.
+\end{problem}
+\begin{solution}
+    Solution to problem 3 goes here.
+\end{solution}
+
+\chapter{Chapter Title 2}
+\thispagestyle{fancy}
+
+% Chapter introduction
+\begin{tcolorbox}[
+    enhanced,
+    colback=lightgray,
+    colframe=darkgray,
+    boxrule=0.5pt,
+    arc=2pt,
+    left=4mm,
+    right=4mm,
+    top=3mm,
+    bottom=3mm
+]
+\textit{This chapter explores fundamental concepts in your subject area. 
+Add a brief description of the topics covered in this chapter.}
+\end{tcolorbox}
+
+\section{Section Title 2}
+
+\begin{problem}{This is Problem 4}{problem4}
+    This is problem 4. Write your problem statement here.
+\end{problem}
+\begin{solution}
+    Solution to problem 4 goes here.
+\end{solution}
+
+\begin{problem}{This is Problem 5}{problem5}
+    This is problem 5. Write your problem statement here.
+\end{problem}
+\begin{solution}
+    Solution to problem 5 goes here.
+    
+    \begin{keyobservation}
+        The key observation is that this problem can be decomposed into two simpler subproblems, each of which can be solved independently.
+    \end{keyobservation}
+    
+    Subproblem 1: We first show that...
+    
+    Subproblem 2: Next, we establish that...
+    
+    \begin{keyinsight}
+        The crucial insight is that combining the results from both subproblems yields a contradiction unless the desired conclusion holds.
+    \end{keyinsight}
+    
+    Therefore, the proof is complete.
+\end{solution}
+
+\end{document}
